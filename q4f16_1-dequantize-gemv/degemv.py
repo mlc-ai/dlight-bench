@@ -12,10 +12,35 @@ from tvm.contrib import nvcc, rpc, utils, ndk
 from tvm.script import tir as T, ir as I
 
 ############ CUDA
-TARGET = tvm.target.Target("nvidia/geforce-rtx-2070")
-DEVICE = tvm.cuda(0)
+# TARGET = tvm.target.Target("nvidia/geforce-rtx-2070")
+# DEVICE = tvm.cuda(0)
+# LOAD_V_SHARED = True
+# LOAD_V_VEC = 8
+# UNROLL = 256
+# USE_REMOTE_CL = False
+
+############ Vulkan
+TARGET = tvm.target.Target(
+    tvm.target.Target(
+        {
+            "kind": "vulkan",
+            "max_threads_per_block": 256,
+            "max_shared_memory_per_block": 32768,
+            "thread_warp_size": 1,
+            "supports_float16": 1,
+            "supports_int16": 1,
+            "supports_int8": 1,
+            "supports_int64": 1,
+            "supports_8bit_buffer": 1,
+            "supports_16bit_buffer": 1,
+            "supports_storage_buffer_storage_class": 1,
+        }
+    ),
+    host="llvm",
+)
+DEVICE = tvm.vulkan(1)
 LOAD_V_SHARED = True
-LOAD_V_VEC = 8
+LOAD_V_VEC = 4
 UNROLL = 256
 USE_REMOTE_CL = False
 
@@ -64,10 +89,10 @@ USE_REMOTE_CL = False
 
 ############
 
-# N = 12288
-# K = 4096
-N = 15360
-K = 5120
+N = 12288
+K = 4096
+# N = 15360
+# K = 5120
 
 cur_best = 1e6
 cur_best_dict = None

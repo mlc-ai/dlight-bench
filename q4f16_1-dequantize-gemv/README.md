@@ -71,15 +71,17 @@ We measure the numbers with L2 cache flushed, n=1, repeat=100, cache_flush_bytes
 |:-----------:|:-----------:|:-----------:|
 | NVIDIA 4090 |     0.0476        |   0.0470          |
 | NVIDIA 2070 |      0.0817       |    0.0780         |
+| Radeon RX 7900 XTX|  0.162 | 0.079  |
 |    M1 pro   |      0.443       |     0.388        |
 |  Adreno 740 |     3.84    |   0.59          |
 
 - shape: 15360 x 5120
 
 |             | dlight (ms) | ours (ms) |
-|-------------|-------------|-------------|
+|:-------------:|:-------------:|:-------------:|
 | NVIDIA 4090 |     0.071        |    0.070         |
 | NVIDIA 2070 |     0.164        |      0.117       |
+| Radeon RX 7900 XTX| 0.130 | 0.115 |
 | M1 pro      |    0.518         |      0.481       |
 | Adreno 740  |    5.84         |    1.02         |
 
@@ -92,7 +94,7 @@ Overall, to get the above results in a reasonable time
 - CUDA and Metal set unroll factors to 256, while Adreno sets to 8
 - Only `VEC_LOAD` over N and `VEC_C` over compute (schedule 1) is considered
 
-**TODO**: AMD and Mali
+**TODO**: Mali
 
 ## Discussions
 
