@@ -44,6 +44,14 @@ LOAD_V_VEC = 4
 UNROLL = 256
 USE_REMOTE_CL = False
 
+############ AMD-Vulkan
+# TARGET = tvm.target.Target("vulkan")
+# DEVICE = tvm.vulkan(0)
+# LOAD_V_SHARED = True
+# LOAD_V_VEC = 8
+# UNROLL = 256
+# USE_REMOTE_VULKAN = False
+
 ############ Metal
 # TARGET = tvm.target.Target("metal")
 # DEVICE = tvm.metal(0)
@@ -89,10 +97,12 @@ USE_REMOTE_CL = False
 
 ############
 
-N = 12288
-K = 4096
+# N = 12288
+# K = 4096
 # N = 15360
 # K = 5120
+N = 10240
+K = 8192
 
 cur_best = 1e6
 cur_best_dict = None
@@ -336,10 +346,14 @@ def schedule1(ret):
             V_shared = sch.cache_read(rf, read_buffer_index=0, storage_scope="shared")
             sch.compute_at(V_shared, tr, preserve_unit_loops=True)
             l = sch.get_loops(block=V_shared)[-1]
+            loop: tir.For = sch.get(l)
+            if isinstance(loop.extent, tir.IntImm):
+                # avoid introducing predicates when vector length is too large
+                vec_length = min(loop.extent // TR // TS, LOAD_V_VEC)
             if TAG_R == "threadIdx.x":
-                _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, LOAD_V_VEC], preserve_unit_iters=True)
+                _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, vec_length], preserve_unit_iters=True)
             else:
-                _, ty, tx, vec = sch.split(l, factors=[None, TR, TS, LOAD_V_VEC], preserve_unit_iters=True)
+                _, ty, tx, vec = sch.split(l, factors=[None, TR, TS, vec_length], preserve_unit_iters=True)
             sch.bind(ty, "threadIdx.y")
             sch.bind(tx, "threadIdx.x")
             sch.vectorize(vec)
@@ -525,10 +539,14 @@ def schedule3(ret):
             V_shared = sch.cache_read(rf, read_buffer_index=0, storage_scope="shared")
             sch.compute_at(V_shared, tr, preserve_unit_loops=True)
             l = sch.get_loops(block=V_shared)[-1]
+            loop: tir.For = sch.get(l)
+            if isinstance(loop.extent, tir.IntImm):
+                # avoid introducing predicates when vector length is too large
+                vec_length = min(loop.extent // TR // TS, LOAD_V_VEC)           
             if TAG_R == "threadIdx.x":
-                _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, LOAD_V_VEC], preserve_unit_iters=True)
+                _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, vec_length], preserve_unit_iters=True)
             else:
-                _, ty, tx, vec = sch.split(l, factors=[None, TR, TS, LOAD_V_VEC], preserve_unit_iters=True)
+                _, ty, tx, vec = sch.split(l, factors=[None, TR, TS, vec_length], preserve_unit_iters=True)
             sch.bind(ty, "threadIdx.y")
             sch.bind(tx, "threadIdx.x")
             sch.vectorize(vec)
