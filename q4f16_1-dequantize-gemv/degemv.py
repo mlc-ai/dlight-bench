@@ -22,7 +22,7 @@ from tvm.script import tir as T, ir as I
 ########### Rocm
 TARGET = tvm.target.Target("rocm")
 DEVICE = tvm.rocm(0)
-LOAD_V_SHARED = False
+LOAD_V_SHARED = True
 LOAD_V_VEC = 8
 UNROLL = 256
 USE_REMOTE_CL = False
@@ -97,12 +97,12 @@ USE_REMOTE_CL = False
 
 ############
 
-# N = 12288
-# K = 4096
+N = 12288
+K = 4096
 # N = 15360
 # K = 5120
-N = 10240
-K = 8192
+# N = 10240
+# K = 8192
 
 cur_best = 1e6
 cur_best_dict = None
