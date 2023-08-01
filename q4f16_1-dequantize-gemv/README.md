@@ -71,7 +71,8 @@ We measure the numbers with L2 cache flushed, n=1, repeat=100, cache_flush_bytes
 |:-----------:|:-----------:|:-----------:|
 | NVIDIA 4090 |     0.0476        |   0.0470          |
 | NVIDIA 2070 |      0.0817       |    0.0780         |
-| Radeon RX 7900 XTX|  0.162 | 0.079  |
+| Radeon RX 7900 XTX (vulkan) |  0.162 | 0.079  |
+| Radeon RX 7900 XTX (rocm) |  0.107 | 0.0557  |
 |    M1 pro   |      0.443       |     0.388        |
 |  Adreno 740 |     3.84    |   0.59          |
 
@@ -81,7 +82,8 @@ We measure the numbers with L2 cache flushed, n=1, repeat=100, cache_flush_bytes
 |:-------------:|:-------------:|:-------------:|
 | NVIDIA 4090 |     0.071        |    0.070         |
 | NVIDIA 2070 |     0.164        |      0.117       |
-| Radeon RX 7900 XTX| 0.130 | 0.115 |
+| Radeon RX 7900 XTX (vulkan) | 0.130 | 0.115 |
+| Radeon RX 7900 XTX (rocm) |  0.141 | 0.094  |
 | M1 pro      |    0.518         |      0.481       |
 | Adreno 740  |    5.84         |    1.02         |
 
