@@ -19,38 +19,38 @@ from tvm.script import tir as T, ir as I
 # UNROLL = 256
 # USE_REMOTE_CL = False
 
-############ Vulkan
-TARGET = tvm.target.Target(
-    tvm.target.Target(
-        {
-            "kind": "vulkan",
-            "max_threads_per_block": 256,
-            "max_shared_memory_per_block": 32768,
-            "thread_warp_size": 1,
-            "supports_float16": 1,
-            "supports_int16": 1,
-            "supports_int8": 1,
-            "supports_int64": 1,
-            "supports_8bit_buffer": 1,
-            "supports_16bit_buffer": 1,
-            "supports_storage_buffer_storage_class": 1,
-        }
-    ),
-    host="llvm",
-)
-DEVICE = tvm.vulkan(1)
-LOAD_V_SHARED = True
-LOAD_V_VEC = 4
+########### Rocm
+TARGET = tvm.target.Target("rocm")
+DEVICE = tvm.rocm(0)
+LOAD_V_SHARED = False
+LOAD_V_VEC = 8
 UNROLL = 256
 USE_REMOTE_CL = False
 
-############ AMD-Vulkan
-# TARGET = tvm.target.Target("vulkan")
+############ Vulkan
+# TARGET = tvm.target.Target(
+#     tvm.target.Target(
+#         {
+#             "kind": "vulkan",
+#             "max_threads_per_block": 256,
+#             "max_shared_memory_per_block": 32768,
+#             "thread_warp_size": 1,
+#             "supports_float16": 1,
+#             "supports_int16": 1,
+#             "supports_int8": 1,
+#             "supports_int64": 1,
+#             "supports_8bit_buffer": 1,
+#             "supports_16bit_buffer": 1,
+#             "supports_storage_buffer_storage_class": 1,
+#         }
+#     ),
+#     host="llvm",
+# )
 # DEVICE = tvm.vulkan(0)
 # LOAD_V_SHARED = True
-# LOAD_V_VEC = 8
+# LOAD_V_VEC = 4
 # UNROLL = 256
-# USE_REMOTE_VULKAN = False
+# USE_REMOTE_CL = False
 
 ############ Metal
 # TARGET = tvm.target.Target("metal")
@@ -408,7 +408,7 @@ def schedule1(ret):
         ("threadIdx.y", "threadIdx.x"),
     ]:
         for VEC_LOAD in [1, 2, 4]:
-            for VEC_C in [4, 2, 1]:
+            for VEC_C in [1] if str(TARGET.kind) == "rocm" else [8, 4, 2, 1]:
                 for TILE_S in [1, 2, 4]:
                     for TILE_R in [1]:
                         TILE_R = TILE_R * 8
