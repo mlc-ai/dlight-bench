@@ -12,8 +12,16 @@ from tvm.contrib import nvcc, rpc, utils, ndk
 from tvm.script import tir as T, ir as I
 
 ############ CUDA
-TARGET = tvm.target.Target("nvidia/geforce-rtx-3090")
-DEVICE = tvm.cuda(0)
+# TARGET = tvm.target.Target("nvidia/geforce-rtx-3090")
+# DEVICE = tvm.cuda(0)
+# LOAD_V_SHARED = True
+# LOAD_V_VEC = 8
+# UNROLL = 256
+# USE_REMOTE_CL = False
+
+########### Rocm
+TARGET = tvm.target.Target("rocm")
+DEVICE = tvm.rocm(0)
 LOAD_V_SHARED = True
 LOAD_V_VEC = 8
 UNROLL = 256

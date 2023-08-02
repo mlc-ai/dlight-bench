@@ -97,10 +97,10 @@ USE_REMOTE_CL = False
 
 ############
 
-N = 12288
-K = 4096
-# N = 15360
-# K = 5120
+# N = 12288
+# K = 4096
+N = 15360
+K = 5120
 # N = 10240
 # K = 8192
 
@@ -349,7 +349,9 @@ def schedule1(ret):
             loop: tir.For = sch.get(l)
             if isinstance(loop.extent, tir.IntImm):
                 # avoid introducing predicates when vector length is too large
-                vec_length = min(loop.extent // TR // TS, LOAD_V_VEC)
+                vec_length = min(int(loop.extent) // TR // TS, LOAD_V_VEC)
+            else:
+                vec_length = LOAD_V_VEC
             if TAG_R == "threadIdx.x":
                 _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, vec_length], preserve_unit_iters=True)
             else:
@@ -408,7 +410,7 @@ def schedule1(ret):
         ("threadIdx.y", "threadIdx.x"),
     ]:
         for VEC_LOAD in [1, 2, 4]:
-            for VEC_C in [1] if str(TARGET.kind) == "rocm" else [8, 4, 2, 1]:
+            for VEC_C in [8, 4, 2, 1]:
                 for TILE_S in [1, 2, 4]:
                     for TILE_R in [1]:
                         TILE_R = TILE_R * 8
@@ -459,6 +461,7 @@ def schedule1(ret):
                                             },
                                         )
                                         if n == 1:
+                                            print("Tested")
                                             tvm.testing.assert_allclose(
                                                 ret.numpy(),
                                                 ret_cur.numpy(),
@@ -542,7 +545,9 @@ def schedule3(ret):
             loop: tir.For = sch.get(l)
             if isinstance(loop.extent, tir.IntImm):
                 # avoid introducing predicates when vector length is too large
-                vec_length = min(loop.extent // TR // TS, LOAD_V_VEC)           
+                vec_length = min(int(loop.extent) // TR // TS, LOAD_V_VEC)
+            else:
+                vec_length = LOAD_V_VEC
             if TAG_R == "threadIdx.x":
                 _, ty, tx, vec = sch.split(l, factors=[None, TS, TR, vec_length], preserve_unit_iters=True)
             else:
@@ -550,7 +555,7 @@ def schedule3(ret):
             sch.bind(ty, "threadIdx.y")
             sch.bind(tx, "threadIdx.x")
             sch.vectorize(vec)
-        
+
         # reduce tile_s * tr * vec to tile_s * tr
         sch.reverse_compute_at(rf2, loop=bx, preserve_unit_loops=True)
         tr, vec_c, ts_tile_s = sch.get_loops(block=rf2)[-3:]
