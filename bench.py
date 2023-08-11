@@ -1,12 +1,18 @@
 """The model benchmark for dlight."""
-from typing import TYPE_CHECKING, Dict, List, Callable, Union, Optional
+from typing import TYPE_CHECKING, Dict, List, Callable, Union, Optional, Literal
 
 import tvm
 from tvm.tir import PrimFunc
 from tvm.ir import IRModule
 from tvm.ir.transform import ModulePass
+
+from tvm import dlight as dl
 from tvm.dlight.benchmark import benchmark_prim_func
-from tvm.dlight.benchmark.utils import default_dym_var_sample_func
+from tvm.dlight.benchmark.utils import random_dym_var_sample_func
+
+CATEGORY = Literal[
+    "Reduction", "GEMV", "Fallback", "Matmul", "Transpose", "GeneralReduction"
+]
 
 if TYPE_CHECKING:
     from tvm.meta_schedule.runner import RPCConfig, EvaluatorConfig
@@ -56,11 +62,14 @@ class DlightBench:
     def benchmark(
         model_name: str,
         *,
-        passes: List[Union[ModulePass, Callable]],
-        func_name: Optional[str] = None,
+        passes: List[
+            Union[ModulePass, Callable]  # pylint: disable=used-before-assignment
+        ],
+        func_names: Optional[List[str]] = None,
         sample_func: Optional[
             Callable[[Dict[str, str], int, int], Dict[str, int]]
         ] = None,
+        category: Optional[CATEGORY] = None,
         target: Optional[tvm.target.Target] = None,
         sample_num_per_func: int = 5,
         evaluator_config: Optional["EvaluatorConfig"] = None,
@@ -74,12 +83,15 @@ class DlightBench:
             The model name.
         passes : List[Union[ModulePass, Callable]]
             The passes to be applied to the PrimFuncs.
-        func_name : Optional[str]
-            The function name to specify the workload, if None, benchmark all
-            functions in the model.
+        func_names : Optional[List[str]]
+            The list of function names to be benchmarked, if None, benchmark
+            all functions in the model.
         sample_func : Optional[Callable[[Dict[str, str], int, int], Dict[str, int]]]
             The function to sample dynamic shape variables, if None, use the
             default function.
+        category : Optional[CATEGORY]
+            Filter out the workloads with the specified category, if None, do
+            not filter.
         target : Optional[tvm.target.Target]
             The target to run benchmark, if None, use the current target.
         sample_num_per_func : int
@@ -89,31 +101,57 @@ class DlightBench:
         rpc_config : Optional["RPCConfig"]
             The RPC config, if None, use the default config.
         """
+
+        def is_category(
+            func: PrimFunc, category: CATEGORY, target: tvm.target.Target
+        ) -> bool:
+            rules = {
+                "Reduction": dl.gpu.Reduction(),
+                "GEMV": dl.gpu.GEMV(),
+                "Fallback": dl.gpu.Fallback(),
+                "Matmul": dl.gpu.Matmul(),
+                "Transpose": dl.gpu.Transpose(),
+                "GeneralReduction": dl.gpu.GeneralReduction(),
+            }
+            if category in rules:
+                try:
+                    mod = IRModule.from_expr(func)
+                    with tvm.transform.PassContext(opt_level=3):
+                        mod = dl.ApplyDefaultSchedule(  # pylint: disable=not-callable
+                            rules[category]
+                        )(mod)
+                    tvm.build(mod, target=target)
+                except Exception:  # pylint: disable=broad-except
+                    return False
+                return True
+            else:
+                raise ValueError("Unsupported category: " + category)
+
         if sample_func is None:
-            sample_func = default_dym_var_sample_func
+            sample_func = random_dym_var_sample_func
         if target is None:
             target = tvm.target.Target.current()
             assert target is not None, "No target specified."
         if model_name not in DlightBench.workloads:
             raise ValueError("Model not registered: " + model_name)
-        if func_name is None:
+        if func_names is None:
             func_names = [func_name for func_name in DlightBench.workloads[model_name]]
-        else:
-            func_names = [func_name]
 
         # Run benchmark
         print("Model:", model_name)
         print("Target:", target)
-        print()
+        print("Category:", category if category is not None else "All", end="\n\n")
 
         for func_name in func_names:
-            print("Benchmarking " + func_name + ":")
             func = DlightBench.workloads[model_name][func_name]
+            if category is not None:
+                if not is_category(func, category, target):
+                    continue
+            print(f"Benchmarking {func_name}:")
             mod = IRModule.from_expr(func)
             for pass_ in passes:
                 print("Applying pass:", pass_)
-            with tvm.transform.PassContext(opt_level=3):
-                mod = tvm.transform.Sequential(passes)(mod)
+            mod = tvm.transform.Sequential(passes, opt_level=3)(mod)
             benchmark_prim_func(
                 mod,
                 dym_var_sample_func=sample_func,

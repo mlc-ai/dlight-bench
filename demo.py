@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Set
 
 import tvm
 import tvm.dlight as dl
@@ -7,8 +7,10 @@ from dlight_bench import DlightBench
 
 
 def factorized(factor: int, minimum: int):
+    """Factorized dynamic shape variable sample function factory."""
+
     def sample_dym_var_sequential(
-        dym_vars: Dict[str, str], sample_idx: int, _: int
+        dym_vars: Set[str], sample_idx: int, _: int
     ) -> Dict[str, int]:
         """
         Sequential dynamic shape variable sample function.
@@ -16,8 +18,8 @@ def factorized(factor: int, minimum: int):
 
         Parameters
         ----------
-        vars : Dict[str, str]
-            Dynamic shape variable dictionary, e.g., {"n": "int32", "m": "int32"}
+        dym_vars : Set[str]
+            Dynamic shape variable set, e.g., {"n", "m"}
         sample_idx : int
             Sample index denotes the index the function is called for the same
             dynamic shape variable dictionary & function.
@@ -32,12 +34,7 @@ def factorized(factor: int, minimum: int):
         results = {}
         cnt = 1
         for var in dym_vars:
-            if dym_vars[var] in ["int32", "int64"]:
-                results[var] = 2 ** (sample_idx // cnt % factor + minimum)
-            else:
-                raise TypeError(
-                    "Unsupported dynamic shape variable type: " + dym_vars[var]
-                )
+            results[var] = 2 ** (sample_idx // cnt % factor + minimum)
             cnt *= factor
         return results
 
@@ -47,15 +44,22 @@ def factorized(factor: int, minimum: int):
 with tvm.target.Target("nvidia/geforce-rtx-3070"):
     DlightBench.benchmark(
         "vicuna_v1_7b_fp16",
-        func_name="matmul",
+        func_names=["matmul"],
         passes=[tvm.tir.transform.DefaultGPUSchedule()],
         sample_func=factorized(5, 5),
         sample_num_per_func=10,
     )
     DlightBench.benchmark(
         "vicuna_v1_7b_fp16",
-        func_name="matmul",
+        func_names=["matmul"],
         passes=[dl.ApplyDefaultSchedule(dl.gpu.Fallback())],
         sample_func=factorized(5, 5),
         sample_num_per_func=10,
     )
+    # DlightBench.benchmark(
+    #     "vicuna_v1_7b_fp16",
+    #     category="Fallback",
+    #     passes=[dl.ApplyDefaultSchedule(dl.gpu.Fallback())],
+    #     sample_func=factorized(5, 5),
+    #     sample_num_per_func=10,
+    # )
