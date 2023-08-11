@@ -56,10 +56,17 @@ with tvm.target.Target("nvidia/geforce-rtx-3070"):
         sample_func=factorized(5, 5),
         sample_num_per_func=10,
     )
-    # DlightBench.benchmark(
-    #     "vicuna_v1_7b_fp16",
-    #     category="Fallback",
-    #     passes=[dl.ApplyDefaultSchedule(dl.gpu.Fallback())],
-    #     sample_func=factorized(5, 5),
-    #     sample_num_per_func=10,
-    # )
+    DlightBench.benchmark(
+        "vicuna_v1_7b_fp16",
+        category="Fallback",
+        passes=[dl.ApplyDefaultSchedule(dl.gpu.Fallback())],
+        sample_func=factorized(5, 5),
+        sample_num_per_func=10,
+    )
+    DlightBench.benchmark(
+        "llama_2_7b_chat_hf_q4f16_1",
+        category="GEMV",
+        passes=[dl.ApplyDefaultSchedule(dl.gpu.GEMV())],
+        sample_func=factorized(5, 5),
+        sample_num_per_func=10,
+    )

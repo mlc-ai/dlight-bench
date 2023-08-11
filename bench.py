@@ -8,7 +8,7 @@ from tvm.ir.transform import ModulePass
 
 from tvm import dlight as dl
 from tvm.dlight.benchmark import benchmark_prim_func
-from tvm.dlight.benchmark.utils import random_dym_var_sample_func
+from tvm.dlight.benchmark.utils import random_dym_var_sample_func, DisplayConfig
 
 CATEGORY = Literal[
     "Reduction", "GEMV", "Fallback", "Matmul", "Transpose", "GeneralReduction"
@@ -160,6 +160,9 @@ class DlightBench:
                 prim_func_name=func_name,
                 evaluator_config=evaluator_config,
                 rpc_config=rpc_config,
-                drop_cols=["Weight", "WxTime(ms)", "Std(us)", "PrimFunc"],
+                display_config=DisplayConfig(
+                    print_out=True,
+                    hidden_cols=["Weight", "WxTime(ms)", "Std(us)", "PrimFunc"],
+                ),
             )
             print()
