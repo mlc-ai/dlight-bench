@@ -253,9 +253,8 @@ def fused_fused_decode4_fused_NT_matmul9_cast1(p_lv1207: T.handle, p_lv1208: T.h
 @T.prim_func(private=True)
 def fused_fused_decode4_take(p_lv604: T.handle, p_lv605: T.handle, p_lv: T.handle, p_output0: T.handle, n: T.int32, nseq: T.int32):
     T.func_attr({"tir.noalias": T.bool(True)})
-    vocab_size = T.int32()
-    lv604 = T.match_buffer(p_lv604, (vocab_size, 640), "uint32")
-    lv605 = T.match_buffer(p_lv605, (vocab_size, 160), "float16")
+    lv604 = T.match_buffer(p_lv604, (32000, 640), "uint32")
+    lv605 = T.match_buffer(p_lv605, (32000, 160), "float16")
     lv = T.match_buffer(p_lv, (nseq * n,), "int32")
     var_T_take_intermediate = T.match_buffer(p_output0, (nseq * n, 5120), "float16")
     # with T.block("root"):
@@ -403,12 +402,11 @@ def kv_cache_transpose_append(var_pages: T.handle, var_k_data: T.handle, var_v_d
     ntoken = T.int32()
     k_data = T.match_buffer(var_k_data, (ntoken, nhead, nfeat), "float16")
     v_data = T.match_buffer(var_v_data, (ntoken, nhead, nfeat), "float16")
-    nseq = T.int32()
-    page_table_indptr = T.match_buffer(var_page_table_indptr, (nseq + 1,), "int32")
+    page_table_indptr = T.match_buffer(var_page_table_indptr, (T.int32(16) + 1,), "int32")
     npage = T.int32()
     page_table_values = T.match_buffer(var_page_table_values, (npage,), "int32")
-    last_page_offset = T.match_buffer(var_last_page_offset, (nseq,), "int32")
-    append_length_indptr = T.match_buffer(var_append_length_indptr, (nseq + 1,), "int32")
+    last_page_offset = T.match_buffer(var_last_page_offset, (T.int32(16),), "int32")
+    append_length_indptr = T.match_buffer(var_append_length_indptr, (T.int32(16) + 1,), "int32")
     pos2seqidx = T.match_buffer(var_pos2seqidx, (ntoken,), "int32")
     # with T.block("root"):
     for global_pos, h, f in T.grid(ntoken, nhead, nfeat):
