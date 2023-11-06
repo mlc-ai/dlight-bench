@@ -1,7 +1,7 @@
 from dlight_bench import DlightBench
 from tvm.script import tir as T
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d14_add26(lv4666: T.Buffer((T.int64(2), T.int64(1280), T.int64(64), T.int64(64)), "float32"), unet_up_blocks_0_upsamplers_0_conv_weight: T.Buffer((T.int64(1280), T.int64(1280), T.int64(3), T.int64(3)), "float32"), lv4668: T.Buffer((T.int64(1), T.int64(1280), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(2), T.int64(1280), T.int64(64), T.int64(64)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -28,7 +28,7 @@ def fused_conv2d14_add26(lv4666: T.Buffer((T.int64(2), T.int64(1280), T.int64(64
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv4668[T.int64(0), v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d21_add27(lv5177: T.Buffer((T.int64(2), T.int64(640), T.int64(128), T.int64(128)), "float32"), unet_up_blocks_1_upsamplers_0_conv_weight: T.Buffer((T.int64(640), T.int64(640), T.int64(3), T.int64(3)), "float32"), lv5179: T.Buffer((T.int64(1), T.int64(640), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(2), T.int64(640), T.int64(128), T.int64(128)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -55,7 +55,7 @@ def fused_conv2d21_add27(lv5177: T.Buffer((T.int64(2), T.int64(640), T.int64(128
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv5179[T.int64(0), v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_matmul28_multiply13(lv34: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(512)), "float32"), lv41: T.Buffer((T.int64(1), T.int64(1), T.int64(512), T.int64(16384)), "float32"), param_0: T.Buffer((), "float32"), var_T_multiply_intermediate: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(16384)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -75,7 +75,7 @@ def fused_matmul28_multiply13(lv34: T.Buffer((T.int64(1), T.int64(1), T.int64(16
             T.writes(var_T_multiply_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_multiply_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_matmul_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] * param_0[()]
 
-@T.prim_func(private=True)
+@T.prim_func
 def matmul29(A: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(16384)), "float32"), B: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(512)), "float32"), matmul: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(512)), "float32")):
     T.func_attr({"op_pattern": 4, "tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -88,7 +88,7 @@ def matmul29(A: T.Buffer((T.int64(1), T.int64(1), T.int64(16384), T.int64(16384)
                 matmul[v_i0, v_i1, v_i2, v_i3] = T.float32(0)
             matmul[v_i0, v_i1, v_i2, v_i3] = matmul[v_i0, v_i1, v_i2, v_i3] + A[v_i0, v_i1, v_i2, v_k] * B[v_i0, v_i1, v_k, v_i3]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d30_add34(lv104: T.Buffer((T.int64(1), T.int64(512), T.int64(256), T.int64(256)), "float32"), vae_decoder_up_blocks_0_upsamplers_0_conv_weight: T.Buffer((T.int64(512), T.int64(512), T.int64(3), T.int64(3)), "float32"), lv106: T.Buffer((T.int64(1), T.int64(512), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(512), T.int64(256), T.int64(256)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -115,7 +115,7 @@ def fused_conv2d30_add34(lv104: T.Buffer((T.int64(1), T.int64(512), T.int64(256)
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv106[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d30_add34_add35_divide7(lv114: T.Buffer((T.int64(1), T.int64(512), T.int64(256), T.int64(256)), "float32"), vae_decoder_up_blocks_1_resnets_0_conv2_weight: T.Buffer((T.int64(512), T.int64(512), T.int64(3), T.int64(3)), "float32"), lv116: T.Buffer((T.int64(1), T.int64(512), T.int64(1), T.int64(1)), "float32"), lv107: T.Buffer((T.int64(1), T.int64(512), T.int64(256), T.int64(256)), "float32"), var_T_divide_intermediate: T.Buffer((T.int64(1), T.int64(512), T.int64(256), T.int64(256)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -156,7 +156,7 @@ def fused_conv2d30_add34_add35_divide7(lv114: T.Buffer((T.int64(1), T.int64(512)
             T.writes(var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_T_add_intermediate_1[v_ax0, v_ax1, v_ax2, v_ax3]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d31_add36(lv144: T.Buffer((T.int64(1), T.int64(512), T.int64(512), T.int64(512)), "float32"), vae_decoder_up_blocks_1_upsamplers_0_conv_weight: T.Buffer((T.int64(512), T.int64(512), T.int64(3), T.int64(3)), "float32"), lv146: T.Buffer((T.int64(1), T.int64(512), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(512), T.int64(512), T.int64(512)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -183,7 +183,7 @@ def fused_conv2d31_add36(lv144: T.Buffer((T.int64(1), T.int64(512), T.int64(512)
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv146[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d32_add37(lv149: T.Buffer((T.int64(1), T.int64(512), T.int64(512), T.int64(512)), "float32"), vae_decoder_up_blocks_2_resnets_0_conv1_weight: T.Buffer((T.int64(256), T.int64(512), T.int64(3), T.int64(3)), "float32"), lv151: T.Buffer((T.int64(1), T.int64(256), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -210,7 +210,7 @@ def fused_conv2d32_add37(lv149: T.Buffer((T.int64(1), T.int64(512), T.int64(512)
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv151[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d33_add37_add38_divide8(lv154: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32"), vae_decoder_up_blocks_2_resnets_0_conv2_weight: T.Buffer((T.int64(256), T.int64(256), T.int64(3), T.int64(3)), "float32"), lv156: T.Buffer((T.int64(1), T.int64(256), T.int64(1), T.int64(1)), "float32"), lv160: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32"), var_T_divide_intermediate: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -251,7 +251,7 @@ def fused_conv2d33_add37_add38_divide8(lv154: T.Buffer((T.int64(1), T.int64(256)
             T.writes(var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_T_add_intermediate_1[v_ax0, v_ax1, v_ax2, v_ax3]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d33_add37(lv164: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32"), vae_decoder_up_blocks_2_resnets_1_conv1_weight: T.Buffer((T.int64(256), T.int64(256), T.int64(3), T.int64(3)), "float32"), lv166: T.Buffer((T.int64(1), T.int64(256), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(256), T.int64(512), T.int64(512)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -278,7 +278,7 @@ def fused_conv2d33_add37(lv164: T.Buffer((T.int64(1), T.int64(256), T.int64(512)
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv166[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d35_add39(lv187: T.Buffer((T.int64(1), T.int64(256), T.int64(1024), T.int64(1024)), "float32"), vae_decoder_up_blocks_2_upsamplers_0_conv_weight: T.Buffer((T.int64(256), T.int64(256), T.int64(3), T.int64(3)), "float32"), lv189: T.Buffer((T.int64(1), T.int64(256), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(256), T.int64(1024), T.int64(1024)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -305,7 +305,7 @@ def fused_conv2d35_add39(lv187: T.Buffer((T.int64(1), T.int64(256), T.int64(1024
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv189[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d36_add40(lv192: T.Buffer((T.int64(1), T.int64(256), T.int64(1024), T.int64(1024)), "float32"), vae_decoder_up_blocks_3_resnets_0_conv1_weight: T.Buffer((T.int64(128), T.int64(256), T.int64(3), T.int64(3)), "float32"), lv194: T.Buffer((T.int64(1), T.int64(128), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -332,7 +332,7 @@ def fused_conv2d36_add40(lv192: T.Buffer((T.int64(1), T.int64(256), T.int64(1024
             T.writes(var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_add_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_conv2d_nchw_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] + lv194[v_ax0, v_ax1, T.int64(0), T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d37_add40_add41_divide9(lv197: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32"), vae_decoder_up_blocks_3_resnets_0_conv2_weight: T.Buffer((T.int64(128), T.int64(128), T.int64(3), T.int64(3)), "float32"), lv199: T.Buffer((T.int64(1), T.int64(128), T.int64(1), T.int64(1)), "float32"), lv203: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32"), var_T_divide_intermediate: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):
@@ -373,7 +373,7 @@ def fused_conv2d37_add40_add41_divide9(lv197: T.Buffer((T.int64(1), T.int64(128)
             T.writes(var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3])
             var_T_divide_intermediate[v_ax0, v_ax1, v_ax2, v_ax3] = var_T_add_intermediate_1[v_ax0, v_ax1, v_ax2, v_ax3]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_conv2d37_add40(lv207: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32"), vae_decoder_up_blocks_3_resnets_1_conv1_weight: T.Buffer((T.int64(128), T.int64(128), T.int64(3), T.int64(3)), "float32"), lv209: T.Buffer((T.int64(1), T.int64(128), T.int64(1), T.int64(1)), "float32"), var_T_add_intermediate: T.Buffer((T.int64(1), T.int64(128), T.int64(1024), T.int64(1024)), "float32")):
     T.func_attr({"tir.noalias": T.bool(True)})
     # with T.block("root"):

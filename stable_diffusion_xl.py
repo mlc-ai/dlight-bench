@@ -44,21 +44,21 @@ def factorized(factor: int, minimum: int):
 
 with tvm.target.Target("apple/m1-gpu"):
     DlightBench.benchmark(
-        "llama_2_batch",
+        "stable_diffusion_xl",
         category="Matmul",
         passes=[dl.ApplyDefaultSchedule(dl.gpu.Matmul())],
         sample_func=factorized(5, 5),
         sample_num_per_func=10,
     )
     DlightBench.benchmark(
-        "llama_2_batch",
+        "stable_diffusion_xl",
         category="GEMV",
         passes=[dl.ApplyDefaultSchedule(dl.gpu.GEMV())],
         sample_func=factorized(5, 5),
         sample_num_per_func=10,
     )
     DlightBench.benchmark(
-        "llama_2_batch",
+        "stable_diffusion_xl",
         category="Reduction",
         passes=[dl.ApplyDefaultSchedule(dl.gpu.Reduction())],
         sample_func=factorized(5, 5),
