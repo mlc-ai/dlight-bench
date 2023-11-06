@@ -4,7 +4,6 @@ from tvm.script import tir as T
 @T.prim_func
 def divide(var_A: T.handle, var_B: T.handle, var_T_divide: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq, vocab_size = T.int64(), T.int64()
     A = T.match_buffer(var_A, (nseq, T.int64(1), vocab_size))
     B = T.match_buffer(var_B, (nseq, T.int64(1), T.int64(1)))
     T_divide = T.match_buffer(var_T_divide, (nseq, T.int64(1), vocab_size))
@@ -50,7 +49,6 @@ def fused_fused_decode1_fused_NT_matmul1_add(lv3: T.Buffer((T.int64(4096), T.int
 @T.prim_func
 def fused_fused_decode1_fused_NT_matmul6_add1(lv490: T.Buffer((T.int64(4096), T.int64(512)), "uint32"), lv491: T.Buffer((T.int64(4096), T.int64(128)), "float16"), p_lv884: T.handle, p_inputs_embeds1: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     lv884 = T.match_buffer(p_lv884, (nseq, T.int64(1), T.int64(4096)), "float16")
     inputs_embeds1 = T.match_buffer(p_inputs_embeds1, (nseq, T.int64(1), T.int64(4096)), "float16")
     p_output0_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), T.int64(4096)), "float16")
@@ -104,7 +102,6 @@ def fused_fused_decode2_NT_matmul2(lv7: T.Buffer((T.int64(22016), T.int64(512)),
 @T.prim_func
 def fused_fused_decode2_NT_matmul7(lv494: T.Buffer((T.int64(22016), T.int64(512)), "uint32"), lv495: T.Buffer((T.int64(22016), T.int64(128)), "float16"), p_lv888: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     lv888 = T.match_buffer(p_lv888, (nseq, T.int64(1), T.int64(4096)), "float16")
     var_NT_matmul_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), T.int64(22016)), "float16")
     # with T.block("root"):
@@ -158,7 +155,6 @@ def fused_fused_decode3_fused_NT_matmul3_add(lv11: T.Buffer((T.int64(4096), T.in
 @T.prim_func
 def fused_fused_decode3_fused_NT_matmul8_add1(lv498: T.Buffer((T.int64(4096), T.int64(1376)), "uint32"), lv499: T.Buffer((T.int64(4096), T.int64(344)), "float16"), p_lv497: T.handle, p_lv493: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     lv497 = T.match_buffer(p_lv497, (nseq, T.int64(1), T.int64(11008)), "float16")
     lv493 = T.match_buffer(p_lv493, (nseq, T.int64(1), T.int64(4096)), "float16")
     p_output0_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), T.int64(4096)), "float16")
@@ -189,7 +185,6 @@ def fused_fused_decode3_fused_NT_matmul8_add1(lv498: T.Buffer((T.int64(4096), T.
 @T.prim_func
 def fused_fused_decode4_fused_NT_matmul4_cast(p_lv480: T.handle, p_lv481: T.handle, lv868: T.Buffer((T.int64(1), T.int64(1), T.int64(4096)), "float16"), p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    vocab_size = T.int64()
     lv480 = T.match_buffer(p_lv480, (vocab_size, T.int64(512)), "uint32")
     lv481 = T.match_buffer(p_lv481, (vocab_size, T.int64(128)), "float16")
     p_output0_intermediate = T.match_buffer(p_output0, (T.int64(1), T.int64(1), vocab_size))
@@ -220,10 +215,8 @@ def fused_fused_decode4_fused_NT_matmul4_cast(p_lv480: T.handle, p_lv481: T.hand
 @T.prim_func
 def fused_fused_decode4_fused_NT_matmul9_cast1(p_lv967: T.handle, p_lv968: T.handle, p_lv1737: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    vocab_size = T.int64()
     lv967 = T.match_buffer(p_lv967, (vocab_size, T.int64(512)), "uint32")
     lv968 = T.match_buffer(p_lv968, (vocab_size, T.int64(128)), "float16")
-    nseq = T.int64(16)
     lv1737 = T.match_buffer(p_lv1737, (nseq, T.int64(1), T.int64(4096)), "float16")
     p_output0_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), vocab_size))
     # with T.block("root"):
@@ -253,9 +246,8 @@ def fused_fused_decode4_fused_NT_matmul9_cast1(p_lv967: T.handle, p_lv968: T.han
 @T.prim_func
 def fused_fused_decode4_take(p_lv484: T.handle, p_lv485: T.handle, p_lv: T.handle, p_output0: T.handle, n: T.int32, nseq: T.int32):
     T.func_attr({"tir.noalias": T.bool(True)})
-    vocab_size = T.int32()
-    lv484 = T.match_buffer(p_lv484, (vocab_size, 512), "uint32")
-    lv485 = T.match_buffer(p_lv485, (vocab_size, 128), "float16")
+    lv484 = T.match_buffer(p_lv484, (T.int32(32000), 512), "uint32")
+    lv485 = T.match_buffer(p_lv485, (T.int32(32000), 128), "float16")
     lv = T.match_buffer(p_lv, (nseq * n,), "int32")
     var_T_take_intermediate = T.match_buffer(p_output0, (nseq * n, 4096), "float16")
     # with T.block("root"):
@@ -292,7 +284,6 @@ def fused_fused_decode_NT_matmul(lv: T.Buffer((T.int64(12288), T.int64(512)), "u
 @T.prim_func
 def fused_fused_decode_NT_matmul5(lv487: T.Buffer((T.int64(12288), T.int64(512)), "uint32"), lv488: T.Buffer((T.int64(12288), T.int64(128)), "float16"), p_lv872: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     lv872 = T.match_buffer(p_lv872, (nseq, T.int64(1), T.int64(4096)), "float16")
     var_NT_matmul_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), T.int64(12288)), "float16")
     # with T.block("root"):
@@ -357,7 +348,6 @@ def fused_split1_silu_multiply(p_lv2: T.handle, p_output0: T.handle):
 @T.prim_func
 def fused_split3_silu1_multiply1(p_lv131: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     lv131 = T.match_buffer(p_lv131, (nseq, T.int64(1), T.int64(22016)), "float16")
     var_T_multiply_intermediate = T.match_buffer(p_output0, (nseq, T.int64(1), T.int64(11008)), "float16")
     # with T.block("root"):
@@ -403,12 +393,11 @@ def kv_cache_transpose_append(var_pages: T.handle, var_k_data: T.handle, var_v_d
     ntoken = T.int32()
     k_data = T.match_buffer(var_k_data, (ntoken, nhead, nfeat), "float16")
     v_data = T.match_buffer(var_v_data, (ntoken, nhead, nfeat), "float16")
-    nseq = T.int32(16)
-    page_table_indptr = T.match_buffer(var_page_table_indptr, (nseq + 1,), "int32")
+    page_table_indptr = T.match_buffer(var_page_table_indptr, (T.int32(16) + 1,), "int32")
     npage = T.int32()
     page_table_values = T.match_buffer(var_page_table_values, (npage,), "int32")
-    last_page_offset = T.match_buffer(var_last_page_offset, (nseq,), "int32")
-    append_length_indptr = T.match_buffer(var_append_length_indptr, (nseq + 1,), "int32")
+    last_page_offset = T.match_buffer(var_last_page_offset, (T.int32(16),), "int32")
+    append_length_indptr = T.match_buffer(var_append_length_indptr, (T.int32(16) + 1,), "int32")
     pos2seqidx = T.match_buffer(var_pos2seqidx, (ntoken,), "int32")
     # with T.block("root"):
     for global_pos, h, f in T.grid(ntoken, nhead, nfeat):
@@ -434,7 +423,6 @@ def kv_cache_transpose_append(var_pages: T.handle, var_k_data: T.handle, var_v_d
 @T.prim_func
 def reshape(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq,))
     T_reshape = T.match_buffer(var_T_reshape, (nseq, T.int64(1), T.int64(1)))
     # with T.block("root"):
@@ -476,7 +464,7 @@ def reshape2(var_A: T.handle, var_T_reshape: T.handle):
 @T.prim_func
 def reshape3(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq, n = T.int64(), T.int64()
+    nseq, n = T.int64(16), T.int64()
     A = T.match_buffer(var_A, (nseq, n), "int32")
     T_reshape = T.match_buffer(var_T_reshape, (nseq * n,), "int32")
     # with T.block("root"):
@@ -490,7 +478,6 @@ def reshape3(var_A: T.handle, var_T_reshape: T.handle):
 @T.prim_func
 def reshape4(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     n = T.int64()
     A = T.match_buffer(var_A, (nseq * n, T.int64(4096)), "float16")
     T_reshape = T.match_buffer(var_T_reshape, (nseq, n, T.int64(4096)), "float16")
@@ -505,7 +492,6 @@ def reshape4(var_A: T.handle, var_T_reshape: T.handle):
 @T.prim_func
 def reshape5(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq, T.int64(1), T.int64(4096)), "float16")
     T_reshape = T.match_buffer(var_T_reshape, (nseq, T.int64(1), T.int64(32), T.int64(128)), "float16")
     # with T.block("root"):
@@ -519,7 +505,6 @@ def reshape5(var_A: T.handle, var_T_reshape: T.handle):
 @T.prim_func
 def reshape6(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq, T.int64(1), T.int64(32), T.int64(128)), "float16")
     T_reshape = T.match_buffer(var_T_reshape, (nseq, T.int64(1), T.int64(4096)), "float16")
     # with T.block("root"):
@@ -556,7 +541,6 @@ def rms_norm(var_A: T.handle, B: T.Buffer((T.int64(4096),), "float16"), var_rms_
 @T.prim_func
 def rms_norm1(var_A: T.handle, B: T.Buffer((T.int64(4096),), "float16"), var_rms_norm: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq, T.int64(1), T.int64(4096)), "float16")
     rms_norm = T.match_buffer(var_rms_norm, (nseq, T.int64(1), T.int64(4096)), "float16")
     # with T.block("root"):
@@ -592,7 +576,6 @@ def slice(var_A: T.handle, slice: T.Buffer((T.int64(1), T.int64(1), T.int64(4096
 @T.prim_func
 def slice1(var_A: T.handle, var_slice: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq, T.int64(1), T.int64(4096)), "float16")
     slice = T.match_buffer(var_slice, (nseq, T.int64(1), T.int64(4096)), "float16")
     # with T.block("root"):
@@ -606,7 +589,6 @@ def slice1(var_A: T.handle, var_slice: T.handle):
 @T.prim_func
 def softmax(var_A: T.handle, var_T_softmax_norm: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq, vocab_size = T.int64(), T.int64()
     A = T.match_buffer(var_A, (nseq, T.int64(1), vocab_size))
     T_softmax_norm = T.match_buffer(var_T_softmax_norm, (nseq, T.int64(1), vocab_size))
     # with T.block("root"):
@@ -674,7 +656,6 @@ def split(var_A: T.handle, var_T_split: T.handle, var_T_split_1: T.handle, var_T
 @T.prim_func
 def split2(var_A: T.handle, var_T_split: T.handle, var_T_split_1: T.handle, var_T_split_2: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
-    nseq = T.int64(16)
     A = T.match_buffer(var_A, (nseq, T.int64(1), T.int64(12288)), "float16")
     T_split = T.match_buffer(var_T_split, (nseq, T.int64(1), T.int64(4096)), "float16")
     T_split_1 = T.match_buffer(var_T_split_1, (nseq, T.int64(1), T.int64(4096)), "float16")
