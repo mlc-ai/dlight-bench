@@ -1,7 +1,7 @@
 from dlight_bench import DlightBench
 from tvm.script import tir as T
 
-@T.prim_func(private=True)
+@T.prim_func
 def divide(var_A: T.handle, var_B: T.handle, var_T_divide: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(32000)))
@@ -15,7 +15,7 @@ def divide(var_A: T.handle, var_B: T.handle, var_T_divide: T.handle):
             T.writes(T_divide[v_ax0, v_ax1, v_ax2])
             T_divide[v_ax0, v_ax1, v_ax2] = A[v_ax0, v_ax1, v_ax2] / B[v_ax0, v_ax1, T.int64(0)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode1_fused_NT_matmul1_add(lv3: T.Buffer((T.int64(5120), T.int64(640)), "uint32"), lv4: T.Buffer((T.int64(5120), T.int64(160)), "float16"), p_lv1100: T.handle, p_inputs_embeds1: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv1100 = T.match_buffer(p_lv1100, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -45,7 +45,7 @@ def fused_fused_decode1_fused_NT_matmul1_add(lv3: T.Buffer((T.int64(5120), T.int
             T.writes(p_output0_intermediate[v_ax0, v_ax1, v_ax2])
             p_output0_intermediate[v_ax0, v_ax1, v_ax2] = inputs_embeds1[v_ax0, v_ax1, v_ax2] + var_NT_matmul_intermediate[v_ax0, v_ax1, v_ax2]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode1_fused_NT_matmul6_add1(lv610: T.Buffer((T.int64(5120), T.int64(640)), "uint32"), lv611: T.Buffer((T.int64(5120), T.int64(160)), "float16"), p_lv15: T.handle, p_inputs_embeds: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -76,7 +76,7 @@ def fused_fused_decode1_fused_NT_matmul6_add1(lv610: T.Buffer((T.int64(5120), T.
             T.writes(p_output0_intermediate[v_ax0, v_ax1, v_ax2])
             p_output0_intermediate[v_ax0, v_ax1, v_ax2] = inputs_embeds[v_ax0, v_ax1, v_ax2] + var_NT_matmul_intermediate[v_ax0, v_ax1, v_ax2]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode2_NT_matmul2(lv7: T.Buffer((T.int64(27648), T.int64(640)), "uint32"), lv8: T.Buffer((T.int64(27648), T.int64(160)), "float16"), p_lv1104: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv1104 = T.match_buffer(p_lv1104, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -98,7 +98,7 @@ def fused_fused_decode2_NT_matmul2(lv7: T.Buffer((T.int64(27648), T.int64(640)),
                 var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = T.float16(0)
             var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = var_NT_matmul_intermediate[v_i0, v_i1, v_i2] + lv1104[v_i0, v_i1, v_k] * p_output0_intermediate[v_i2, v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode2_NT_matmul7(lv614: T.Buffer((T.int64(27648), T.int64(640)), "uint32"), lv615: T.Buffer((T.int64(27648), T.int64(160)), "float16"), p_lv19: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -121,7 +121,7 @@ def fused_fused_decode2_NT_matmul7(lv614: T.Buffer((T.int64(27648), T.int64(640)
                 var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = T.float16(0)
             var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = var_NT_matmul_intermediate[v_i0, v_i1, v_i2] + lv19[v_i0, v_i1, v_k] * p_output0_intermediate[v_i2, v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode3_fused_NT_matmul3_add(lv11: T.Buffer((T.int64(5120), T.int64(1728)), "uint32"), lv12: T.Buffer((T.int64(5120), T.int64(432)), "float16"), p_lv10: T.handle, p_lv6: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv10 = T.match_buffer(p_lv10, (T.int64(16), T.int64(1), T.int64(13824)), "float16")
@@ -151,7 +151,7 @@ def fused_fused_decode3_fused_NT_matmul3_add(lv11: T.Buffer((T.int64(5120), T.in
             T.writes(p_output0_intermediate[v_ax0, v_ax1, v_ax2])
             p_output0_intermediate[v_ax0, v_ax1, v_ax2] = lv6[v_ax0, v_ax1, v_ax2] + var_NT_matmul_intermediate[v_ax0, v_ax1, v_ax2]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode3_fused_NT_matmul8_add1(lv618: T.Buffer((T.int64(5120), T.int64(1728)), "uint32"), lv619: T.Buffer((T.int64(5120), T.int64(432)), "float16"), p_lv617: T.handle, p_lv613: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -182,7 +182,7 @@ def fused_fused_decode3_fused_NT_matmul8_add1(lv618: T.Buffer((T.int64(5120), T.
             T.writes(p_output0_intermediate[v_ax0, v_ax1, v_ax2])
             p_output0_intermediate[v_ax0, v_ax1, v_ax2] = lv613[v_ax0, v_ax1, v_ax2] + var_NT_matmul_intermediate[v_ax0, v_ax1, v_ax2]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode4_fused_NT_matmul4_cast(p_lv600: T.handle, p_lv601: T.handle, p_lv2169: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv600 = T.match_buffer(p_lv600, (T.int64(32000), T.int64(640)), "uint32")
@@ -213,7 +213,7 @@ def fused_fused_decode4_fused_NT_matmul4_cast(p_lv600: T.handle, p_lv601: T.hand
             T.writes(p_output0_intermediate[v_i0, v_i1, v_i2])
             p_output0_intermediate[v_i0, v_i1, v_i2] = T.Cast("float32", var_NT_matmul_intermediate[v_i0, v_i1, v_i2])
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode4_fused_NT_matmul9_cast1(p_lv1207: T.handle, p_lv1208: T.handle, lv1084: T.Buffer((T.int64(1), T.int64(1), T.int64(5120)), "float16"), p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv1207 = T.match_buffer(p_lv1207, (T.int64(32000), T.int64(640)), "uint32")
@@ -243,7 +243,7 @@ def fused_fused_decode4_fused_NT_matmul9_cast1(p_lv1207: T.handle, p_lv1208: T.h
             T.writes(p_output0_intermediate[v_i0, v_i1, v_i2])
             p_output0_intermediate[v_i0, v_i1, v_i2] = T.Cast("float32", var_NT_matmul_intermediate[v_i0, v_i1, v_i2])
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode4_take(p_lv604: T.handle, p_lv605: T.handle, p_lv: T.handle, p_output0: T.handle, n: T.int32, nseq: T.int32):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv604 = T.match_buffer(p_lv604, (32000, 640), "uint32")
@@ -258,7 +258,7 @@ def fused_fused_decode4_take(p_lv604: T.handle, p_lv605: T.handle, p_lv: T.handl
             T.writes(var_T_take_intermediate[v_ax0, v_ax1])
             var_T_take_intermediate[v_ax0, v_ax1] = (T.Cast("float16", T.bitwise_and(T.shift_right(lv604[lv[v_ax0], v_ax1 // 8], T.Cast("uint32", v_ax1 % 8) * T.uint32(4)), T.uint32(15))) - T.float16(7)) * lv605[lv[v_ax0], v_ax1 // 32]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode_NT_matmul(lv: T.Buffer((T.int64(15360), T.int64(640)), "uint32"), lv1: T.Buffer((T.int64(15360), T.int64(160)), "float16"), p_lv1088: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv1088 = T.match_buffer(p_lv1088, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -280,7 +280,7 @@ def fused_fused_decode_NT_matmul(lv: T.Buffer((T.int64(15360), T.int64(640)), "u
                 var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = T.float16(0)
             var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = var_NT_matmul_intermediate[v_i0, v_i1, v_i2] + lv1088[v_i0, v_i1, v_k] * p_output0_intermediate[v_i2, v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_fused_decode_NT_matmul5(lv607: T.Buffer((T.int64(15360), T.int64(640)), "uint32"), lv608: T.Buffer((T.int64(15360), T.int64(160)), "float16"), p_lv3: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -303,7 +303,7 @@ def fused_fused_decode_NT_matmul5(lv607: T.Buffer((T.int64(15360), T.int64(640))
                 var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = T.float16(0)
             var_NT_matmul_intermediate[v_i0, v_i1, v_i2] = var_NT_matmul_intermediate[v_i0, v_i1, v_i2] + lv3[v_i0, v_i1, v_k] * p_output0_intermediate[v_i2, v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_split1_silu_multiply(p_lv2: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     lv2 = T.match_buffer(p_lv2, (T.int64(16), T.int64(1), T.int64(27648)), "float16")
@@ -344,7 +344,7 @@ def fused_split1_silu_multiply(p_lv2: T.handle, p_output0: T.handle):
             T.writes(var_T_multiply_intermediate[v_ax0, v_ax1, v_ax2])
             var_T_multiply_intermediate[v_ax0, v_ax1, v_ax2] = var_T_multiply_intermediate_1[v_ax0, v_ax1, v_ax2] * var_T_split_sections_intermediate_1[v_ax0, v_ax1, v_ax2]
 
-@T.prim_func(private=True)
+@T.prim_func
 def fused_split3_silu1_multiply1(p_lv163: T.handle, p_output0: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -420,7 +420,7 @@ def kv_cache_transpose_append(var_pages: T.handle, var_k_data: T.handle, var_v_d
                 with T.LetStmt((page_table_indptr[seq_idx + 1] - page_table_indptr[seq_idx] - 1) * page_size + last_page_offset[seq_idx], var=seqlen):
                     pages[page_table_values[page_table_indptr[seq_idx] + (seqlen - (append_length_indptr[seq_idx + 1] - vgpos)) // page_size], layer_id, 1, vh, (seqlen - (append_length_indptr[seq_idx + 1] - vgpos)) % page_size, vf] = v_data[vgpos, vh, vf]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -433,7 +433,7 @@ def reshape(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2, v_ax3])
             T_reshape[v_ax0, v_ax1, v_ax2, v_ax3] = A[((v_ax2 * T.int64(128) + v_ax3) // T.int64(5120) + v_ax0 + v_ax1) % T.int64(16), T.int64(0), (v_ax2 * T.int64(128) + v_ax3) % T.int64(5120)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape1(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(40), T.int64(128)), "float16")
@@ -446,7 +446,7 @@ def reshape1(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2])
             T_reshape[v_ax0, v_ax1, v_ax2] = A[(v_ax2 // T.int64(5120) + v_ax0 + v_ax1) % T.int64(16), T.int64(0), v_ax2 % T.int64(5120) // T.int64(128), v_ax2 % T.int64(128)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape2(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16),))
@@ -459,7 +459,7 @@ def reshape2(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2])
             T_reshape[v_ax0, v_ax1, v_ax2] = A[(v_ax0 + v_ax1 + v_ax2) % T.int64(16)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape3(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -473,7 +473,7 @@ def reshape3(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0])
             T_reshape[v_ax0] = A[v_ax0 // n % T.int64(16), v_ax0 % n]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape4(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -487,7 +487,7 @@ def reshape4(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2])
             T_reshape[v_ax0, v_ax1, v_ax2] = A[(v_ax2 // T.int64(5120) + v_ax0 * n + v_ax1) % (T.int64(16) * n), v_ax2 % T.int64(5120)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape5(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -501,7 +501,7 @@ def reshape5(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2, v_ax3])
             T_reshape[v_ax0, v_ax1, v_ax2, v_ax3] = A[T.int64(0), ((v_ax2 * T.int64(128) + v_ax3) // T.int64(5120) + v_ax0 * n + v_ax1) % n, (v_ax2 * T.int64(128) + v_ax3) % T.int64(5120)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def reshape6(var_A: T.handle, var_T_reshape: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -515,7 +515,7 @@ def reshape6(var_A: T.handle, var_T_reshape: T.handle):
             T.writes(T_reshape[v_ax0, v_ax1, v_ax2])
             T_reshape[v_ax0, v_ax1, v_ax2] = A[T.int64(0), (v_ax2 // T.int64(5120) + v_ax0 * n + v_ax1) % n, v_ax2 % T.int64(5120) // T.int64(128), v_ax2 % T.int64(128)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def rms_norm(var_A: T.handle, B: T.Buffer((T.int64(5120),), "float16"), var_rms_norm: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -538,7 +538,7 @@ def rms_norm(var_A: T.handle, B: T.Buffer((T.int64(5120),), "float16"), var_rms_
             T.writes(rms_norm_1[v_bsz, v_i, v_k])
             rms_norm_1[v_bsz, v_i, v_k] = T.Cast("float16", T.Cast("float32", B[v_k]) * (T.Cast("float32", A[v_bsz, v_i, v_k]) / T.sqrt(Ared_temp[v_bsz, v_i] * T.float32(0.00019531250000000001) + T.float32(1.0000000000000001e-05))))
 
-@T.prim_func(private=True)
+@T.prim_func
 def rms_norm1(var_A: T.handle, B: T.Buffer((T.int64(5120),), "float16"), var_rms_norm: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -560,7 +560,7 @@ def rms_norm1(var_A: T.handle, B: T.Buffer((T.int64(5120),), "float16"), var_rms
             T.writes(rms_norm[v_bsz, v_i, v_k])
             rms_norm[v_bsz, v_i, v_k] = T.Cast("float16", T.Cast("float32", B[v_k]) * (T.Cast("float32", A[v_bsz, v_i, v_k]) / T.sqrt(Ared_temp[v_bsz, v_i] * T.float32(0.00019531250000000001) + T.float32(1.0000000000000001e-05))))
 
-@T.prim_func(private=True)
+@T.prim_func
 def slice(var_A: T.handle, slice_1: T.Buffer((T.int64(1), T.int64(1), T.int64(5120)), "float16")):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
@@ -573,7 +573,7 @@ def slice(var_A: T.handle, slice_1: T.Buffer((T.int64(1), T.int64(1), T.int64(51
             T.writes(slice_1[v_i, v_j, v_k])
             slice_1[v_i, v_j, v_k] = A[v_i, n - T.int64(1), v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def slice1(var_A: T.handle, var_slice: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(5120)), "float16")
@@ -586,7 +586,7 @@ def slice1(var_A: T.handle, var_slice: T.handle):
             T.writes(slice[v_i, v_j, v_k])
             slice[v_i, v_j, v_k] = A[v_i, T.int64(0), v_k]
 
-@T.prim_func(private=True)
+@T.prim_func
 def softmax(var_A: T.handle, var_T_softmax_norm: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(32000)))
@@ -625,7 +625,7 @@ def softmax(var_A: T.handle, var_T_softmax_norm: T.handle):
             T.block_attr({"axis": 2})
             T_softmax_norm[v_i0, v_i1, v_i2] = T_softmax_exp[v_i0, v_i1, v_i2] / T_softmax_expsum[v_i0, v_i1]
 
-@T.prim_func(private=True)
+@T.prim_func
 def split(var_A: T.handle, var_T_split: T.handle, var_T_split_1: T.handle, var_T_split_2: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     A = T.match_buffer(var_A, (T.int64(16), T.int64(1), T.int64(15360)), "float16")
@@ -652,7 +652,7 @@ def split(var_A: T.handle, var_T_split: T.handle, var_T_split_1: T.handle, var_T
             T.writes(T_split_2[v_ax0, v_ax1, v_ax2])
             T_split_2[v_ax0, v_ax1, v_ax2] = A[v_ax0, v_ax1, v_ax2 + T.int64(10240)]
 
-@T.prim_func(private=True)
+@T.prim_func
 def split2(var_A: T.handle, var_T_split: T.handle, var_T_split_1: T.handle, var_T_split_2: T.handle):
     T.func_attr({"tir.noalias": T.bool(True)})
     n = T.int64()
